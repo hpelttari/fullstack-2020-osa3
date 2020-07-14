@@ -33,7 +33,6 @@ const generateId = () => {
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
-    console.log(request.body)
   if (!body.name) {
     return response.status(400).json({ 
       error: 'content missing' 
@@ -42,6 +41,12 @@ app.post('/api/persons', (request, response) => {
   if (!body.number) {
     return response.status(400).json({ 
       error: 'number missing' 
+    })
+  }
+
+  if (persons.some(person => person.name == body.name)) {
+    return response.status(400).json({ 
+      error: 'name must be unique' 
     })
   }
 
@@ -80,7 +85,6 @@ app.get('/api/persons/:id', (request, response) => {
 app.get('/info', (req, res) => {
     const time = new Date(Date.now())
     const nPersons = persons.length
-    console.log(nPersons, time)
     const info = `<p>Phonebook has info for ${nPersons} people</p>
     <p>${time}</p>`
     res.send(info)
