@@ -26,7 +26,16 @@ let persons = [
   ]
 
 app.use(express.json()) 
-app.use(morgan('tiny'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
+
+morgan.token('body', function getBody(req) {
+    if(req.method === "POST"){
+        return JSON.stringify(req.body)        
+    } else {
+        return ' '
+    }
+})
+
 const generateId = () => {
   return Math.floor(Math.random()*Number.MAX_SAFE_INTEGER)
 }
